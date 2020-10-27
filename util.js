@@ -1,27 +1,31 @@
 require('dotenv').config();
 const { google } = require('googleapis');
-const range = 'Response!A1:Z1000';
+const range = 'Sheet4!' + 'A1:B5';
 
-async function getValues({auth}){  
+async function getValues(auth) {
+  // console.log(auth);
   const sheets = google.sheets('v4');
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.SPREADSHEET_ID,
       range,
-      auth  
+      auth
     });
     const { data } = response;
+    // console.log(JSON.stringify(data.values));
+    // return singleArrayToJSON(data.values);
     return singleArrayToJSON(data.values);
-  } catch(err){
+    // singleArrayToJSON(data.values);
+  } catch (err) {
     return err;
   }
 }
 
-async function addRow({auth}, values){ 
-  const fields = Object.keys(values)
-  const arrayValues = Object.keys(values).map(key=>JSON.stringify(values[key]));
+async function addRow({ auth }, values) {
+  const fields = Object.keys(values);
+  const arrayValues = Object.keys(values).map(key => JSON.stringify(values[key]));
   const sheets = google.sheets('v4');
-  try{
+  try {
     const response = await sheets.spreadsheets.values.append({
       auth,
       spreadsheetId: process.env.SPREADSHEET_ID,
@@ -32,21 +36,22 @@ async function addRow({auth}, values){
       }
     });
     return true;
-  }catch(err){
-    return false
+  } catch (err) {
+    return false;
   }
 }
 
-function singleArrayToJSON(array){
+function singleArrayToJSON(array) {
   const responses = [];
   const fields = array[0];
-  for(let i=1; i<array.length; i++){
+  for (let i = 1; i < array.length; i++) {
     const response = {};
-    fields.forEach((field, index)=>{
+    fields.forEach((field, index) => {
       const value = array[i][index];
-      if(value){
-        response[field] = JSON.parse(value);
-      }else{
+      if (value) {
+        console.log({ value });
+        response[field] = value; // JSON.parse(value);
+      } else {
         response[field] = null;
       }
     });
@@ -57,4 +62,4 @@ function singleArrayToJSON(array){
 
 module.exports = {
   getValues, addRow
-}
+};

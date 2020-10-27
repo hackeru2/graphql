@@ -1,6 +1,31 @@
 const { google } = require('googleapis');
 const { getValues, addRow } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
+const keys = require('./keys.json');
+const client = new google.auth.JWT(
+  keys.client_email, null, keys.private_key, ['https://www.googleapis.com/auth/spreadsheets']
+);
+client.authorize(function (err, tokens) {
+  if (err) {
+    return console.log('err', err);
+
+  } else console.log('connected!');
+  return gsRun(client);
+});
+
+async function gsRun(cl) {
+
+  return google.sheets({ version: 'v4', auth: cl });
+  // const opt = { spreadsheetId: '14dirzl8Gi4vDNwVnj2zAqdKozUQ8yeYqlC3uacQwdq4', range: 'A2:B5' };
+  // let { data } = await gsapi.spreadsheets.values; //.get(opt);
+  // return data.values;
+  // console.log('data', data.values);
+}
+
+
+
+
+
 
 const typeDefs = gql`
 
@@ -39,38 +64,26 @@ const typeDefs = gql`
     skill_level: SkillLevel
   }
 
+  type Get {
+    id: String
+    type: String
+  }
+
   type Response {
-    name: String
-    github_username: String
-    discord_username: String
-    availability: Availability
-    time_zone: String
-    interests: [String]
-    programming_languages: [ProgrammingLanguage]
-    current_skillset: [String]
-    desired_skillset: String
-    learning_style: [LearningStyle]
-    communication_preference: [CommunicationPreference]
+   id: String
+   type : String
   }
 
   input ResponseInput {
-    name: String
-    github_username: String
-    discord_username: String
-    availability: Availability
-    time_zone: String
-    interests: [String]
-    programming_languages: [ProgrammingLanguageInput]
-    current_skillset: [String]
-    desired_skillset: String
-    learning_style: [LearningStyle]
-    communication_preference: [CommunicationPreference]
+    id: String
+    type : String
   }
 
   type Query {
     responses: [Response]
+    get : [Get]
   }
-
+  
   type Mutation {
     createResponse(response: ResponseInput!): Boolean
     updateResponse(response: ResponseInput!, where: Int!): Boolean
@@ -83,7 +96,15 @@ const resolvers = {
   Query: {
     responses: async (_, args, ctx) => {
       const response = await getValues(ctx);
-      return response; 
+
+      return response;
+    },
+
+    get: async (_, args, ctx) => {
+      // console.log(client);
+      const response = await getValues(client);
+      console.log(response);
+      return response;
     },
   },
 
@@ -95,20 +116,17 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ 
-  typeDefs, 
+const server = new ApolloServer({
+  typeDefs,
   resolvers,
-  context: async () => {
-    const auth = await google.auth.getClient({
-      // Scopes can be specified either as an array or as a single, space-delimited string.
-      scopes: ['https://www.googleapis.com/auth/spreadsheets']
-    }); 
-    return {
-      auth
-    }
-  }
+  // context: async () => {
+  //   // console.log(client);
+  //   return client;
+  // }
 });
+
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
+
 });

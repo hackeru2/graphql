@@ -1,19 +1,19 @@
 const { sheets, authenticate, buildRequests, buildUpdateRequests, getCurrentSheets } = require('./utils');
 
 class GoogleSheetSchema {
-  constructor({schemaValues, spreadsheetId, authClient}){
+  constructor({ schemaValues, spreadsheetId, authClient }) {
     this.spreadsheetId = spreadsheetId;
     this.schema = new Map(schemaValues);
-    this.auth = authClient
+    this.auth = authClient;
   }
 
-  async generateSheets(){
+  async generateSheets() {
     const currentSheets = await getCurrentSheets(this.auth, this.spreadsheetId);
     const requests = buildRequests(this.schema, currentSheets);
     // if our requests are empty then do nothing
-    if(requests.length>0){
+    if (requests.length > 0) {
       const addSheetResponse = await sheets.spreadsheets.batchUpdate({
-        spreadsheetId:this.spreadsheetId,
+        spreadsheetId: this.spreadsheetId,
         resource: {
           requests: [...requests]
         },
@@ -25,11 +25,11 @@ class GoogleSheetSchema {
         schema: this.schema,
         auth: this.auth
       });
-      updateRequests.forEach( async (req) => {
+      updateRequests.forEach(async (req) => {
         try {
           const addFields = await sheets.spreadsheets.values.append(req);
           console.log(addFields.data);
-        }catch(err){
+        } catch (err) {
           console.log(err);
         }
       });

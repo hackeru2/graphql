@@ -110,7 +110,8 @@ const resolvers = {
 
   Mutation: {
     createResponse: async (_, { response }, ctx) => {
-      const res = await addRow(ctx, response);
+
+      const res = await addRow(client, response);
       return res;
     }
   }

@@ -21,7 +21,8 @@ async function getValues(auth) {
   }
 }
 
-async function addRow({ auth }, values) {
+async function addRow(auth, values) {
+
   const fields = Object.keys(values);
   const arrayValues = Object.keys(values).map(key => JSON.stringify(values[key]));
   const sheets = google.sheets('v4');

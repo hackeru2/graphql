@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { getValues, addRow } = require('./util');
+const { getValues, addRow, updateRow } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
 const keys = require('./keys.json');
 const client = new google.auth.JWT(
@@ -28,82 +28,67 @@ async function gsRun(cl) {
 
 
 const typeDefs = gql`
-
-  enum Availability {
-    LOW
-    MED
-    HIGH
-  }
-  
-  enum CommunicationPreference {
-    VIDEO_CHAT
-    CHAT
-    EMAIL
-  }
-
-  enum LearningStyle {
-    TUTORIALS
-    DOCUMENTATION
-    PAIR PROGRAMMING
-    BOOKS
-  }
-
-  enum SkillLevel {
-    BEGINNER
-    INTERMEDIATE
-    ADVANCED
-  }
-
-  type ProgrammingLanguage {
-    language: String!
-    skill_level: SkillLevel
-  }
-
-  input ProgrammingLanguageInput {
-    language: String!
-    skill_level: SkillLevel
-  }
-
   type Get {
     id: String
     type: String
+  }
+  type GetCuisine {
+    id: String
+    name: String
+    meals  :[Meal]
   }
 
   type Response {
    id: String
    type : String
   }
-
+  type Meal {
+    id: String
+    type : String
+   }
   input ResponseInput {
     id: String
     type : String
   }
 
+  input InputVal {
+    name : String
+  }
+  type Message {
+    cell: String  
+    name: String
+     
+  }
   type Query {
     responses: [Response]
     get : [Get]
+    cuisines : [GetCuisine]
+    
   }
   
   type Mutation {
     createResponse(response: ResponseInput!): Boolean
-    updateResponse(response: ResponseInput!, where: Int!): Boolean
-    # TODO: updateResponse mutation
+    updateCuisine(name : String!, where: Int!) : Message  
+   
   }
-
-`;
+  
+  `;
+//# TODO: updateResponse mutation
+//updateResponse(response: ResponseInput!, where: Int!): Boolean
 
 const resolvers = {
   Query: {
-    responses: async (_, args, ctx) => {
-      const response = await getValues(ctx);
+    // responses: async (_, args, ctx) => {
+    //   const response = await getValues(ctx);
 
-      return response;
-    },
+    //   return response;
+    // },
 
-    get: async (_, args, ctx) => {
-      // console.log(client);
-      const response = await getValues(client);
-      console.log(response);
+    cuisines: async (_, args, ctx) => {
+      console.log(client);
+      let range = 'cuisine!' + 'A1:B10000';
+      const response = await getValues(client, range);
+
       return response;
     },
   },
@@ -112,6 +97,11 @@ const resolvers = {
     createResponse: async (_, { response }, ctx) => {
 
       const res = await addRow(client, response);
+      return res;
+    },
+    updateCuisine: async (_, args, ctx) => {
+      console.log({ args });
+      const res = await updateRow(client, args);
       return res;
     }
   }

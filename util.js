@@ -149,16 +149,14 @@ function singleArrayToJSON(array) {
     fields.forEach((field, index) => {
 
 
-      const value = array[i][index];
+      let value = array[i][index];
       if (value) {
-
+        if (field == 'id') value = Number(value);
         response[field] = value; // JSON.parse(value);
       } else {
         response[field] = null;
       }
     });
-    // response.meals = [{ type: + i + 'meals', id: i }];
-    //  console.log('response', response);
     responses.push(response);
   }
 

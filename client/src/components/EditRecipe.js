@@ -28,20 +28,17 @@ class EditRecipe extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
 
-    /// console.log('prevProps', prevProps.recipe)
-    // console.log('this.props', this.props.recipe)
     if (this.props.recipe !== prevProps.recipe) {
       let selected = (this.props.recipe.cuisine_id)
       let selected_meal_id = (this.props.recipe.meal_id)
       this.setState({ selected, selected_meal_id })
-      this.onChange(selected)
+      this.onChangeCuisine(selected)
     }
   }
-  onChange(value) {
-
+  onChangeCuisine(value) {
+    console.log('this.selectVal', this.selectVal.value)
     let selected = String(value)
     this.setState({ disableFirst: true, selected })
-
 
     this.setMealOptions(selected)
   }
@@ -63,7 +60,6 @@ class EditRecipe extends Component {
     )
     console.log('response', response)
     this.setState({ loading: false })
-    //toast(JSON.stringify(response, null, 2));
     toast.success(this.props.recipe.name + " UPDATED!", { autoClose: 3000 });
 
 
@@ -73,8 +69,23 @@ class EditRecipe extends Component {
   setMealOptions(selected) {
     let mealOptions = groupBy(this.props.getMealCuisinePivotQuery.cuisine_meal, 'cuisine_id')[selected]
     if (!mealOptions) mealOptions = []
+
+
+
+
     console.log('mealOptions', mealOptions)
     this.setState({ mealOptions })
+
+
+    this.setMealIdValue(mealOptions)
+
+
+  }
+  setMealIdValue(mealOptions) {
+
+    let meal_ids = mealOptions.map(mo => mo.meal_id)
+    if (!meal_ids.includes(this.state.selected_meal_id))
+      this.setState({ selected_meal_id: meal_ids[0] })
   }
 
   onChangeMealHandeler(e) {
@@ -120,15 +131,17 @@ class EditRecipe extends Component {
           className="recipes-container"
           onSubmit={this.onSubmitForm.bind(this)}  >
           <fieldset disabled={!recipe.name || this.state.loading === "true"}>
-
+            <label htmlFor="cuisine_id">Cuisine</label>
             <select
               value={this.state.selected}
               name="cuisine_id" id="cuisine_id"
-              onChange={(e) => this.onChange(e.target.value)} >
+              onChange={(e) => this.onChangeCuisine(e.target.value)} >
               <option value="" disabled={this.state.disableFirst}>Select Cuisine...</option>
               {cuisineOptions}
             </select>
+            <label htmlFor="meal_id">Meal</label>
             <select
+              ref={(input) => this.selectVal = input}
               onChange={(e) => this.onChangeMealHandeler(e)
               }
               value={this.state.selected_meal_id}

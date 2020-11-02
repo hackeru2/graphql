@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import { getCuisineQuery } from "../queries/query";
-// import BookDetails from "./BookDetails";
 import EditRecipe from "./EditRecipe";
-// const getBooksQuery = gql`
-//     {
-//      books {
-//       name
-//       id
-//     }
-//   }`
 
 class CuisineList extends Component {
-  // console.log('this.props', this.props)
   state = {
     selected: null
 
@@ -31,10 +22,8 @@ class CuisineList extends Component {
       <div>
         {JSON.stringify(this.props.recipe)}
         <ul id="cuisine-list">
-          {/* <li>Book Name</li> */}
           {this.displayCuisine()}
         </ul>
-        {/* <BookDetails bookId={this.state.selected} notSelect={() => this.setState({ selected: null })} /> */}
         <EditRecipe recipe={this.props.recipe} notSelect={() => this.setState({ selected: null })} />
       </div>
     );

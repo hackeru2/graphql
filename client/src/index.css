@@ -69,11 +69,6 @@ form .field{
   grid-gap: 10px;
 }
 
-form label{
-  color:black;
-  text-align: right;
-  padding: 6px;
-}
 
 form input, form select{
   margin: 4px 0;
@@ -120,7 +115,7 @@ form button{
   margin: 5px;
   border-radius: 8px;
   color:white;
-  text-shadow: #AD1457 2px 2px;
+  text-shadow: #AD1457 2px 2px 4px;
   font-size: 3em;
   background: linear-gradient(#AD1457 , #ffff);
   box-shadow: 1px 2px 3px rgba(0,0,0,0.3);
@@ -224,3 +219,15 @@ background-color: #fff7fb;
       -webkit-transform: scale(1.0);
     }
   }
+
+  h4 {
+     margin-left: 4px;
+  }
+ 
+  form label{
+    font-size: 0.3em;
+    /* color:black; */
+    color:white;
+    text-align: right;
+  }
+  

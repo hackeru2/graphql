@@ -13,7 +13,6 @@ class Recipy extends Component {
       cuisine_id = recipy.cuisine_id
       meal_id = recipy.meal_id
     }
-    console.log('this.props', this.props)
     return (
       <React.Fragment>
         <CuisineName cuisine_id={cuisine_id} />

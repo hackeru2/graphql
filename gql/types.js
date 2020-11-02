@@ -20,10 +20,7 @@ const typeDefs = gql`
     cuisine:[GetCuisine]
   }
 
-  type Response {
-   id: String
-   type : String
-  }
+  
   type cuisine_meal {
     cuisine_id: Int
     meal_id : Int
@@ -32,15 +29,6 @@ const typeDefs = gql`
     id: ID
     type : String
    }
-  input ResponseInput {
-    id: String
-    type : String
-  }
-  type Message {
-    cell: String  
-    name: String
-     
-  }
 
   type RecipeMessage {
     cell: String  
@@ -50,12 +38,11 @@ const typeDefs = gql`
 
   type Query {
     cuisine_meal : [cuisine_meal]
-    responses: [Response]
     get : [Get]
     cuisines : [GetCuisine]
     meals : [Meal]
     recipes : [GetRecipe]
-    
+
     cuisine (id:ID): GetCuisine
     meal (id:ID): Meal
     recipy (id:ID) : GetRecipe
@@ -63,7 +50,6 @@ const typeDefs = gql`
   }
   
   type Mutation {
-    createResponse(response: ResponseInput!): Boolean,
    
     updateRecipe(cuisine_id : Int  , meal_id: Int , id:ID!)  : GetRecipe 
    

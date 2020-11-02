@@ -1,7 +1,7 @@
 import * as compose from 'lodash.flowright';
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
-import { addBookMutation, getCuisineQuery, updateBookMutation } from "../queries/query";
+import { addBookMutation, getAuthorsQuery, getCuisineQuery, updateBookMutation } from "../queries/query";
 
 
 class AddBook extends Component {
@@ -62,9 +62,9 @@ class AddBook extends Component {
     )
   }
   displayAuthors() {
-    var data = this.props.getMealsQuery;
+    var data = this.props.getAuthorsQuery;
 
-    // return data.authors.map(author => (<option value={author.id} key={author.id}>{author.name}</option>))
+    //    return data.authors.map(author => (<option value={author.id} key={author.id}>{author.name}</option>))
   }
   render() {
     let formVals = {}
@@ -89,7 +89,7 @@ class AddBook extends Component {
         </div>
         <div className="field">
           <label>Author:</label>
-          {this.props.getCuisineQuery.loading ? <div>Loading Authors...</div> : (
+          {this.props.getAuthorsQuery.loading ? <div>Loading Authors...</div> : (
             <select value={formVals.authorId} disabled={this.props.editBook} onChange={e => this.setState({ authorId: e.target.value })} >
               <option>Select author</option>
               {this.displayAuthors()}
@@ -105,9 +105,9 @@ class AddBook extends Component {
 
 
 
-//export default graphql(getMealsQuery)(AddBook);
+//export default graphql(getAuthorsQuery)(AddBook);
 export default compose(
-  graphql(getCuisineQuery, { name: "getCuisineQuery" }),
+  graphql(getAuthorsQuery, { name: "getAuthorsQuery" }),
   graphql(addBookMutation, { name: "addBookMutation" }),
   graphql(updateBookMutation, { name: "updateBookMutation" }) ,
 )(AddBook);

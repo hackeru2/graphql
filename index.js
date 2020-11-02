@@ -1,7 +1,8 @@
 const { google } = require('googleapis');
-const { getValues, addRow, updateRow } = require('./util');
+const { groupPivot, getValues, addRow, updateRow, getRow } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
 const keys = require('./keys.json');
+const { typeDefs } = require('./gql/types');
 const client = new google.auth.JWT(
   keys.client_email, null, keys.private_key, ['https://www.googleapis.com/auth/spreadsheets']
 );
@@ -27,66 +28,51 @@ async function gsRun(cl) {
 
 
 
-const typeDefs = gql`
-  type Get {
-    id: String
-    type: String
-  }
-  type GetCuisine {
-    id: String
-    name: String
-    meals  :[Meal]
-  }
 
-  type Response {
-   id: String
-   type : String
-  }
-  type Meal {
-    id: String
-    type : String
-   }
-  input ResponseInput {
-    id: String
-    type : String
-  }
-
-  input InputVal {
-    name : String
-  }
-  type Message {
-    cell: String  
-    name: String
-     
-  }
-  type Query {
-    responses: [Response]
-    get : [Get]
-    cuisines : [GetCuisine]
-    
-  }
-  
-  type Mutation {
-    createResponse(response: ResponseInput!): Boolean
-    updateCuisine(name : String!, where: Int!) : Message  
-   
-  }
-  
-  `;
 //# TODO: updateResponse mutation
 //updateResponse(response: ResponseInput!, where: Int!): Boolean
 
 const resolvers = {
   Query: {
+    cuisine: async (_, args, ctx) => {
+      console.log({ args });
+      let id = Number(args.id) + 1;
+      //let range = 'cuisine!' + 'A1:B10000';
+      let ranges = ['cuisine!A1:B1', `cuisine!A${id}:B${id}`];   // TODO: Update placeholder value.
+      const response = await getRow(client, ranges);
+
+      return response;
+    },
     // responses: async (_, args, ctx) => {
     //   const response = await getValues(ctx);
 
     //   return response;
     // },
-
+    cuisine_meal: async (_, args, ctx) => {
+      //console.log(client);
+      let range = 'cuisine_meal!' + 'A1:10000';
+      const response = await groupPivot(client, range);
+      //const response = await getValues(client, range);
+      console.log('responsegroupPivot', response);
+      return response;
+    },
     cuisines: async (_, args, ctx) => {
-      console.log(client);
-      let range = 'cuisine!' + 'A1:B10000';
+      //console.log(client);
+      let range = 'cuisine!' + 'A1:10000';
+      const response = await getValues(client, range);
+
+      return response;
+    },
+    meals: async (_, args, ctx) => {
+      //console.log(client);
+      let range = 'meals!' + 'A1:10000';
+      const response = await getValues(client, range);
+
+      return response;
+    },
+    recipes: async (_, args, ctx) => {
+      //console.log(client);
+      let range = 'recipes!' + 'A1:E10000';
       const response = await getValues(client, range);
 
       return response;
@@ -100,10 +86,17 @@ const resolvers = {
       return res;
     },
     updateCuisine: async (_, args, ctx) => {
-      console.log({ args });
+      //console.log({ args });
+      args.sheet = 'recipes';
+      const res = await updateRow(client, args);
+      return res;
+    },
+    updateRecipe: async (_, args, ctx) => {
+      //console.log({ args });
       const res = await updateRow(client, args);
       return res;
     }
+
   }
 };
 

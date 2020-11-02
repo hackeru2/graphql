@@ -7,6 +7,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 
+
 // Pass your GraphQL endpoint to uri
 const client = new ApolloClient({ uri: 'http://localhost:4000/graphql' });
 

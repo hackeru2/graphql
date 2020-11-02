@@ -1,5 +1,6 @@
-body {
+body, html {
  background-color: #eee;
+  margin: 0;padding:0;
  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
 }
 
@@ -28,13 +29,22 @@ body{
   height: 100%;
 }
 
-#book-list{
+ #cuisine-list  {
   padding: 0;
 }
 
-#book-list li{
+#recipe-list  {
+  font-size: 25px;
+  padding: 10px;
+  margin:20px;
+  width:380px;
+  float: right;
+}
+
+#cuisine-list li, #recipe-list , form#edit-recipe select , button.submit-edit  {
   display: inline-block;
   margin: 12px;
+  
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #880E4F;
@@ -42,7 +52,7 @@ body{
   cursor: pointer;
   color: #880E4F;
 }
-
+ 
 form{
   background: #fff;
   padding: 20px;
@@ -50,6 +60,7 @@ form{
   left: 0;
   bottom: 0;
   width: 400px;
+  width: 95%;
 }
 
 form .field{
@@ -88,7 +99,7 @@ form button{
   left: auto;
   right: 10px;
 }
-#book-details{
+#cuisine-details  {
   position: fixed;
   top: 0;
   right: 0;
@@ -101,7 +112,49 @@ form button{
   box-sizing: border-box;
   color: #fff;
 }
-#add-book-update , #book-delete {
+#add-cuisine-update , #cuisine-delete {
   right: 0;
   left: auto;
 }
+.recipes-container {
+  margin: 5px;
+  border-radius: 8px;
+  color:white;
+  text-shadow: #AD1457 2px 2px;
+  font-size: 3em;
+  background: linear-gradient(#AD1457 , #ffff);
+  box-shadow: 1px 2px 3px rgba(0,0,0,0.3);
+  border: 0;
+  min-height: 230px;
+  padding: 0 10px;
+  
+  
+}
+#cuisine-list li:hover , button.submit-edit:hover {
+background-color: #AD1457;
+color:white
+}
+#cuisine-list li:active , button.submit-edit:active{
+  background-color:#880E4F;
+  transform: scale(0.95);
+  transform: translateY(1px);
+  color:white
+  }
+
+  #recipe-list option {
+  font-size: 20px;
+  width: 400px;
+  }
+
+  form#edit-recipe {
+    position: relative;
+  }
+  button.submit-edit {
+    position: relative;
+    background-color:wheat ;
+    font-size: 12px;
+    bottom: 0;
+  }
+  fieldset  {
+    border: none;
+  }

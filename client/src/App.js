@@ -1,6 +1,6 @@
 
 import AddBook from "./components/AddBook";
-import CuisineList from "./components/CuisineList";
+import Recipes from "./components/Recipes";
 
 
 
@@ -8,7 +8,8 @@ function App() {
   return (
     <div id="main">
       <h1>AMIR GRAPHQL</h1>
-      <CuisineList />
+      <Recipes />
+
       <AddBook />
     </div>
   );

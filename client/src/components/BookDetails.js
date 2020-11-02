@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
-import { getBookQuery } from "../queries/query";
+import { getOneCuisine } from "../queries/query";
 import AddBook from "./AddBook";
 import DeleteBook from "./DeleteBook";
 
@@ -27,22 +27,24 @@ class BookDetails extends Component {
     }
   }
   displayBookDetails() {
-    console.log({ PROPS: this.props })
-    const { book } = this.props.data
+    const { cuisine } = this.props.data
 
+    console.log({ cuisine })
 
-    if (book && this.props.bookId) return (
+    if (cuisine && this.props.bookId) return (
       <div>
-        <h2>{book.name}</h2>
-        <p>{book.genre}</p>
-        <p>{book.author.name}</p>
-        <p>All books by this author :</p>
+        <h2>{cuisine.name}</h2>
+        {/* <p>{book.genre}</p>
+        <p>{book.author.name}</p> */}
+
+        { /*  
+        All books by this aut
         <ul className="other-books">
           {book.author.books.map(item => (
             <li key={item.id}>{item.name}</li>
           )
           )}
-        </ul>
+        </ul> */}
 
       </div>
     )
@@ -61,7 +63,7 @@ class BookDetails extends Component {
     if (this.state.isDeleting) changeBook = <DeleteBook book={this.props.data.book} closeDeleteBook={wasDeleted => this.closeDeleteBook(wasDeleted)} />
 
     return (
-      <div id="book-details">
+      <div id="cuisine-details">
         {/* <p>Output book details here</p> */}
         {this.displayBookDetails()}
         {this.props.data.book ? editOrClose : ''}
@@ -75,7 +77,7 @@ class BookDetails extends Component {
 
 
 
-export default graphql(getBookQuery, {
+export default graphql(getOneCuisine, {
 
   options: (props) => { return { variables: { id: props.bookId } } }
 })(BookDetails);

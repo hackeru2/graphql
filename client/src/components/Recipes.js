@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { graphql } from 'react-apollo';
 import { getRecipyQuery } from "../queries/query";
-import CuisineList from "./CuisineList";
+import EditRecipe from "./EditRecipe";
+import Recipy from "./Recipy";
 export class Recipes extends Component {
   state = {
     disableFirst: false,
@@ -27,22 +28,28 @@ export class Recipes extends Component {
 
   render() {
     let firstOptionMessage = this.props.data.loading ? 'Loading...' : "Select Recipe"
-    let desc = ''
-    if (this.state.selected)
-      desc = (<p>{this.state.selected.description}</p>)
+    let desc = '', name = ""
+    if (this.state.selected && this.state.selected.description) {
+      desc = (<p>🌌<b> Desciption:</b> {this.state.selected.description}</p>)
+      name = (<h4> {this.state.selected.name}</h4>)
+    }
 
     return (
       <React.Fragment>
         <div className="recipes-container">
-          Recipes
+          Recipy List
           <select id="recipe-list" onChange={(e) => this.setState({ disableFirst: true, selected: this.props.data.recipes.find(r => r.id === e.target.value) })} >
             <option disabled={this.state.disableFirst} value={undefined} >{firstOptionMessage}</option>
             {this.displayRecipes()}
           </select>
           <hr />
+          {name}
+          <Recipy recipy_id={this.state.selected.id} />
+
           {desc}
         </div>
-        <CuisineList recipe={this.state.selected} />
+        {/* <CuisineList recipe={this.state.selected} /> */}
+        <EditRecipe recipe={this.state.selected} notSelect={() => this.setState({ selected: null })} />
       </React.Fragment>
 
     )

@@ -3,12 +3,12 @@ const { google } = require('googleapis');
 const { random, groupBy } = require('lodash');
 //const range = 'Sheet4!' + 'A1:B5';
 let range = '!' + 'A1:B10000';
-
+const spreadsheetId = process.env.SPREADSHEET_ID;
 
 async function groupPivot(auth, range) {
 
   return await getValues(auth, range);
-  return Object.values(groupBy(response, 'cuisine_id'));
+  // return Object.values(groupBy(response, 'cuisine_id'));
 }
 async function getValues(auth, range) {
 
@@ -16,7 +16,7 @@ async function getValues(auth, range) {
   const sheets = google.sheets('v4');
   try {
     const response = await sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.SPREADSHEET_ID,
+      spreadsheetId,
       range,
       auth
     });
@@ -37,7 +37,7 @@ async function getRow(auth, ranges) {
 
   console.log({ ranges });
   var params = {
-    spreadsheetId: process.env.SPREADSHEET_ID,
+    spreadsheetId,
     auth,
     ranges,//: ['cuisine!A1:B1', 'cuisine!A2:B2'],  // TODO: Update placeholder value.
     valueRenderOption: 'FORMATTED_VALUE',
@@ -52,20 +52,29 @@ async function getRow(auth, ranges) {
 
   } catch (reason) {
     console.error('error in get row : ' + reason);
+    return {};
   }
   return arrToObj(response.data.valueRanges.flatMap(arr => arr.values));
 
 }
 
-async function updateRow(auth, { name, where, sheet }) {
-  if (!sheet) sheet = 'cuisine';
-  if (where < 2) throw new Error('dont u dare go on the first field !!!');
-  let range = sheet + '!' + 'B' + where;
+
+
+
+
+
+async function updateRow(auth, args) {
+  let pos = Number(args.id) + 1;
+
+  // if (args.id < 2) throw new Error(args.id + ' <-  dont u dare go on the first field !!!');
+  let range = 'recipes!' + 'D' + pos + ':E' + pos;
   var valueRangeBody =
   {
+
     values: [
       [
-        name
+        args.meal_id,
+        args.cuisine_id,
       ]
     ],
     range,
@@ -78,31 +87,21 @@ async function updateRow(auth, { name, where, sheet }) {
     responseValueRenderOption: 'FORMATTED_VALUE',
     valueInputOption: 'RAW',
     // The ID of the spreadsheet to update.
-    spreadsheetId: process.env.SPREADSHEET_ID,  // TODO: Update placeholder value.
+    spreadsheetId,  // TODO: Update placeholder value.
     range,
     resource: valueRangeBody
-    // The A1 notation of the values to update.
-    // TODO: Update placeholder value.
 
-    // How the input data should be interpreted.
   };
 
-
-  // TODO: Add desired properties to the request body. All existing properties
-  // will be replaced.
-
-
-  console.log('range', range);
 
   const sheets = google.sheets('v4');
 
   try {
     let { data } = await sheets.spreadsheets.values.update(params);
-
-    let cell = data.updatedData.range.replace('cuisine!', '');
-    return { name: data.updatedData.values[0][0], cell };
+    console.log('data.updatedData.values', data.updatedData.values);
+    //let cell = data.updatedData.range.replace('cuisine!', '');
+    return { meal_id: data.updatedData.values[0][0], cuisine_id: data.updatedData.values[0][1], id: args.id }; // cell };
   } catch (reason) {
-    throw Error(reason);
     console.error('error: ' + reason);
   }
 
@@ -140,6 +139,7 @@ function arrToObj(arr) {
   // return { id: Math.ceil(Math.random() * 100), type: new Date(), meals: [] };
   return obj;
 }
+
 function singleArrayToJSON(array) {
   const responses = [];
   const fields = array[0];
@@ -168,3 +168,5 @@ function singleArrayToJSON(array) {
 module.exports = {
   getValues, addRow, updateRow, getRow, groupPivot
 };
+
+

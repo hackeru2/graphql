@@ -35,7 +35,7 @@ class CuisineList extends Component {
           {this.displayCuisine()}
         </ul>
         {/* <BookDetails bookId={this.state.selected} notSelect={() => this.setState({ selected: null })} /> */}
-        <EditRecipe recipe={this.props.recipe} bookId={this.state.selected} notSelect={() => this.setState({ selected: null })} />
+        <EditRecipe recipe={this.props.recipe} notSelect={() => this.setState({ selected: null })} />
       </div>
     );
   }

@@ -98,14 +98,29 @@ const getOneCuisine = gql`
         cuisine(id:$id) {
           id
           name
-          meals {
-            id
-            type
-          }
         }
     }
 `;
 
+const getOneMeal = gql`
+    query($id:ID){
+        meal(id:$id) {
+          id
+          type
+        }
+    }
+`;
+const getOneRecipy = gql`
+    query($id:ID){
+        recipy(id:$id) {
+          id
+          name
+          meal_id
+          cuisine_id
+          description
+        }
+    }
+`;
 
 
 
@@ -130,11 +145,11 @@ const updateBookMutation = gql`
 `;
 
 const updateRecipeMutation = gql`
-    mutation($cuisine_id : String!  , $meal_id: String! , $id:ID!)  {
+    mutation($cuisine_id : Int!  , $meal_id: Int! , $id:ID!)  {
       updateRecipe(cuisine_id:$cuisine_id,meal_id:$meal_id,id:$id){
+        meal_id
         cuisine_id
-      meal_id
-      id
+        id
      }    
     }
 `;
@@ -150,5 +165,5 @@ const deleteBookMutation = gql`
      }    
     }
 `;
-export { getMealQuery, deleteBookMutation, updateBookMutation, getMealsQuery, getOneCuisine, getCuisineQuery, addBookMutation, getRecipyQuery, getMealCuisinePivotQuery, getAuthorsQuery, updateRecipeMutation };
+export { getOneRecipy, getOneMeal, getMealQuery, deleteBookMutation, updateBookMutation, getMealsQuery, getOneCuisine, getCuisineQuery, addBookMutation, getRecipyQuery, getMealCuisinePivotQuery, getAuthorsQuery, updateRecipeMutation };
 

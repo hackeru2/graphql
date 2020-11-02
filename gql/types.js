@@ -14,10 +14,10 @@ const typeDefs = gql`
     id: ID
     name: String
     description: String
-    meal_id: String
-    cuisine_id: String
-    #meal:[Meal]
-    #cuisine:[GetCuisine]
+    meal_id: Int
+    cuisine_id: Int
+    meal:[Meal]
+    cuisine:[GetCuisine]
   }
 
   type Response {
@@ -35,10 +35,6 @@ const typeDefs = gql`
   input ResponseInput {
     id: String
     type : String
-  }
-
-  input InputVal {
-    name : String
   }
   type Message {
     cell: String  
@@ -58,19 +54,23 @@ const typeDefs = gql`
     get : [Get]
     cuisines : [GetCuisine]
     meals : [Meal]
-    cuisine (id:ID): GetCuisine
     recipes : [GetRecipe]
+    
+    cuisine (id:ID): GetCuisine
+    meal (id:ID): Meal
+    recipy (id:ID) : GetRecipe
     
   }
   
   type Mutation {
-    createResponse(response: ResponseInput!): Boolean
-    updateCuisine(name : String!, where: Int!) : Message  
-    updateRecipe(cuisine_id : String! , meal_id: String!, id:ID!)  : GetRecipe  
+    createResponse(response: ResponseInput!): Boolean,
+   
+    updateRecipe(cuisine_id : Int  , meal_id: Int , id:ID!)  : GetRecipe 
    
   }
   
   `;
+//updateCuisine(name : String!, where: Int!) : Message
 
 module.exports = {
   typeDefs

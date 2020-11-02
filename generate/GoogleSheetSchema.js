@@ -1,4 +1,4 @@
-const { sheets, authenticate, buildRequests, buildUpdateRequests, getCurrentSheets } = require('./utils');
+const { sheets, buildRequests, buildUpdateRequests, getCurrentSheets } = require('./utils');
 
 class GoogleSheetSchema {
   constructor({ schemaValues, spreadsheetId, authClient }) {

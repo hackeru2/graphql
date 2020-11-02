@@ -35,7 +35,7 @@ async function gsRun(cl) {
 const resolvers = {
   Query: {
     cuisine: async (_, args, ctx) => {
-      console.log({ args });
+      console.log({ CUISINEARGS: args });
       let id = Number(args.id) + 1;
       //let range = 'cuisine!' + 'A1:B10000';
       let ranges = ['cuisine!A1:B1', `cuisine!A${id}:B${id}`];   // TODO: Update placeholder value.
@@ -43,6 +43,33 @@ const resolvers = {
 
       return response;
     },
+    meal: async (_, args, ctx) => {
+
+      let id = Number(args.id) + 1;
+      let ranges = ['meals!A1:B1', `meals!A${id}:B${id}`];
+      let response = '';
+      try {
+        response = await getRow(client, ranges);
+      } catch (error) {
+        throw 'error in meal';
+      }
+
+      return response;
+    },
+    recipy: async (_, args, ctx) => {
+
+      let id = Number(args.id) + 1;
+      let ranges = ['recipes!A1:E1', `recipes!A${id}:E${id}`];
+      let response = '';
+      try {
+        response = await getRow(client, ranges);
+      } catch (error) {
+        throw ' error in recipes getRow';
+      }
+
+      return response;
+    },
+
     // responses: async (_, args, ctx) => {
     //   const response = await getValues(ctx);
 
@@ -53,7 +80,7 @@ const resolvers = {
       let range = 'cuisine_meal!' + 'A1:10000';
       const response = await groupPivot(client, range);
       //const response = await getValues(client, range);
-      console.log('responsegroupPivot', response);
+      //console.log('responsegroupPivot', response);
       return response;
     },
     cuisines: async (_, args, ctx) => {
@@ -85,15 +112,16 @@ const resolvers = {
       const res = await addRow(client, response);
       return res;
     },
-    updateCuisine: async (_, args, ctx) => {
-      //console.log({ args });
-      args.sheet = 'recipes';
-      const res = await updateRow(client, args);
-      return res;
-    },
+    // updateCuisine: async (_, args, ctx) => {
+    //   //console.log({ args });
+    //   args.sheet = 'recipes';
+    //   const res = await updateRow(client, args);
+    //   return res;
+    // },
     updateRecipe: async (_, args, ctx) => {
-      //console.log({ args });
+      console.log({ args });
       const res = await updateRow(client, args);
+      console.log('res123', res);
       return res;
     }
 

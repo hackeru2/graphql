@@ -1,5 +1,4 @@
 
-import AddBook from "./components/AddBook";
 import Recipes from "./components/Recipes";
 
 
@@ -10,7 +9,7 @@ function App() {
       <h1>AMIR GRAPHQL</h1>
       <Recipes />
 
-      <AddBook />
+      {/* <AddBook /> */}
     </div>
   );
 }

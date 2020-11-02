@@ -70,17 +70,12 @@ class EditRecipe extends Component {
     let mealOptions = groupBy(this.props.getMealCuisinePivotQuery.cuisine_meal, 'cuisine_id')[selected]
     if (!mealOptions) mealOptions = []
 
-
-
-
-    console.log('mealOptions', mealOptions)
     this.setState({ mealOptions })
-
-
     this.setMealIdValue(mealOptions)
 
-
   }
+
+
   setMealIdValue(mealOptions) {
 
     let meal_ids = mealOptions.map(mo => mo.meal_id)

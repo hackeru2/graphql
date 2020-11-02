@@ -111,7 +111,7 @@ const server = new ApolloServer({
 });
 
 
-console.log('server', server.httpServer);
+
 
 
 server.listen().then(({ url }) => {

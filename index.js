@@ -1,16 +1,11 @@
 
-const compression = require('compression');
-const express = require('express');
 const { google } = require('googleapis');
 const { groupPivot, getValues, updateRow, getRow } = require('./util');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server');
 const keys = require('./keys.json');
 const { typeDefs } = require('./gql/types');
 
 
-
-const app = express();
-app.use(compression());
 
 // Authorzie.....................
 
@@ -111,18 +106,19 @@ const resolvers = {
   }
 };
 
+
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // context: async () => {
+  //   // console.log(client);
+  //   return client;
+  // }
 });
 
 
-const port = process.env.PORT || 4000;
+server.listen().then(({ url }) => {
+  console.log(`🚀  Server ready at ${url}`);
 
-server.applyMiddleware({ app }); // app is from an existing express app
-
-app.listen({ port }, () =>
-  console.log(
-    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
-  )
-);
+});

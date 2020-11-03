@@ -29,6 +29,5 @@
   "devDependencies": {
     "eslint": "7.11.0",
     "nodemon": "^1.19.4"
-  },
-  "proxy": "http://localhost:4000"
+  }
 }

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { google } = require('googleapis');
-const { random, groupBy } = require('lodash');
 //const range = 'Sheet4!' + 'A1:B5';
 let range = '!' + 'A1:B10000';
 const spreadsheetId = process.env.SPREADSHEET_ID;

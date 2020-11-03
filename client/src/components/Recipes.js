@@ -11,7 +11,6 @@ export class Recipes extends Component {
 
   displayRecipes() {
     var data = this.props.data;
-    console.log('data REcipe', data)
     if (data.recipes)
       return data.recipes.map(recipe => (
         <option
@@ -23,10 +22,11 @@ export class Recipes extends Component {
 
 
   render() {
+
     let firstOptionMessage = this.props.data.loading ? 'Loading...' : "Select Recipe"
     let desc = '', name = ""
     if (this.state.selected && this.state.selected.description) {
-      desc = (<p>🌌<b> Desciption:</b> {this.state.selected.description}</p>)
+      desc = (<p>🌌<b> Description:</b> {this.state.selected.description}</p>)
       name = (<h4> Name : {this.state.selected.name}</h4>)
     }
 

@@ -36,7 +36,6 @@ class EditRecipe extends Component {
     }
   }
   onChangeCuisine(value) {
-    console.log('this.selectVal', this.selectVal.value)
     let selected = String(value)
     this.setState({ disableFirst: true, selected })
 
@@ -52,13 +51,12 @@ class EditRecipe extends Component {
       id: Number(this.props.recipe.id)
     }
     this.setState({ loading: "true" })
-    let response = this.props.updateRecipeMutation(
+    this.props.updateRecipeMutation(
       {
         variables,
         refetchQueries: [{ query: getRecipyQuery }]
       }
     )
-    console.log('response', response)
     this.setState({ loading: false })
     toast.success(this.props.recipe.name + " UPDATED!", { autoClose: 3000 });
 
@@ -88,12 +86,12 @@ class EditRecipe extends Component {
     this.setState({ selected_meal_id: e.target.value })
   }
   render() {
+    console.log('12345', 12345)
     let recipe = this.props.recipe
     let getMealQuery = this.props.getMealQuery
     let mealsByID = {}
     if (!getMealQuery.loading) {
       mealsByID = keyBy(this.props.getMealQuery.meals, 'id')
-      console.log(mealsByID, 'mealsByID')
 
     }
 
@@ -160,5 +158,4 @@ export default
     graphql(getRecipyQuery, { name: "getRecipyQuery" }),
     graphql(updateRecipeMutation, { name: "updateRecipeMutation" }),
     graphql(getMealQuery, { name: "getMealQuery" }))
-
     (EditRecipe);

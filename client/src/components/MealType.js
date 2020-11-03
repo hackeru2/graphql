@@ -20,14 +20,12 @@ class MealType extends Component {
 
     )
     else {
-      console.log('mealFail', this.props)
 
       return (<span></span>)
     }
   }
 
   render() {
-    console.log('this.props', this.props)
     let MealType = this.displayMealType()
     return (
       <React.Fragment>

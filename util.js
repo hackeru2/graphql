@@ -23,7 +23,6 @@ async function getValues(auth, range) {
 
 
     let values = data.values.filter(row => row[0]);
-    console.log({ getValues: values[0] });
     return singleArrayToJSON(values);
     // singleArrayToJSON(data.values);
   } catch (err) {
@@ -34,7 +33,6 @@ async function getValues(auth, range) {
 
 async function getRow(auth, ranges) {
 
-  console.log({ ranges });
   var params = {
     spreadsheetId,
     auth,
@@ -134,8 +132,6 @@ function arrToObj(arr) {
 
   });
   obj.meals = [];
-  console.log(obj);
-  // return { id: Math.ceil(Math.random() * 100), type: new Date(), meals: [] };
   return obj;
 }
 

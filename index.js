@@ -4,6 +4,11 @@ const { groupPivot, getValues, updateRow, getRow } = require('./util');
 const { ApolloServer } = require('apollo-server');
 const keys = require('./keys.json');
 const { typeDefs } = require('./gql/types');
+const express = require('express');
+const path = require('path');
+
+const app = express();
+app.use(express.static(path.join(__dirname, './public')));
 
 
 
@@ -123,4 +128,8 @@ server.listen({ port: process.env.PORT || '4000' }).then(all => {
   console.log('all', all);
   console.log(`🚀  Server ready at ${all.url}`);
 
+});
+
+app.get('*', (req, res) => {
+  res.send(express.static(path.join(__dirname, './public/index.html')));
 });

@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const { google } = require('googleapis');
 //const range = 'Sheet4!' + 'A1:B5';
 let range = '!' + 'A1:B10000';

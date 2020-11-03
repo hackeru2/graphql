@@ -124,12 +124,11 @@ const server = new ApolloServer({
   // }
 });
 
+app.get('*', (req, res) => {
+  res.send(express.static(path.join(__dirname, './public/index.html')));
+});
 server.listen({ port: process.env.PORT || '4000' }).then(all => {
   console.log('all', all);
   console.log(`🚀  Server ready at ${all.url}`);
 
-});
-
-app.get('*', (req, res) => {
-  res.send(express.static(path.join(__dirname, './public/index.html')));
 });

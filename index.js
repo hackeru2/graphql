@@ -1,7 +1,6 @@
-
 const { google } = require('googleapis');
 const { groupPivot, getValues, updateRow, getRow } = require('./util');
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
 const keys = require('./keys.json');
 const { typeDefs } = require('./gql/types');
 const express = require('express');
@@ -27,7 +26,7 @@ if (!dev) {
     res.sendfile(path.resolve(__dirname, 'public', 'index.html'));
   });
 }
-//else app.use(morgan('dev'));
+else app.use(morgan('dev'));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -37,11 +36,9 @@ app.use(express.json());
 
 
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 
-app.get('*', (req, res) => {
-  res.send(express.static(path.join(__dirname, '/public/index.html')));
-});
+
 
 // Authorzie.....................
 
@@ -156,8 +153,8 @@ const server = new ApolloServer({
 });
 
 
-server.listen({ port: process.env.PORT || '4000' }).then(all => {
-  console.log('all', all);
-  console.log(`🚀  Server ready at ${all.url}`);
+server.applyMiddleware({ app });
 
-});
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+);

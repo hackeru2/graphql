@@ -6,11 +6,42 @@ const keys = require('./keys.json');
 const { typeDefs } = require('./gql/types');
 const express = require('express');
 const path = require('path');
+var cors = require('cors');
+
+const compression = require('compression');
+const morgan = require('morgan');
+
 
 const app = express();
-app.use(express.static(path.join(__dirname, './public')));
+const dev = app.get('env') !== 'production';
+
+if (!dev) {
+  app.disable('x-powered-by');
+  app.use(compression());
+  app.use(morgan('common'));
+
+  app.use(express.static(path.resolve(__dirname, 'public')));
+
+  app.get('/', (req, res, next) => {
+
+    res.sendfile(path.resolve(__dirname, 'public', 'index.html'));
+  });
+}
+//else app.use(morgan('dev'));
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 
+
+
+
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', (req, res) => {
+  res.send(express.static(path.join(__dirname, '/public/index.html')));
+});
 
 // Authorzie.....................
 
@@ -124,9 +155,7 @@ const server = new ApolloServer({
   // }
 });
 
-app.get('*', (req, res) => {
-  res.send(express.static(path.join(__dirname, './public/index.html')));
-});
+
 server.listen({ port: process.env.PORT || '4000' }).then(all => {
   console.log('all', all);
   console.log(`🚀  Server ready at ${all.url}`);

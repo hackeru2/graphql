@@ -23,6 +23,7 @@
     "googleapis": "^34.0.0",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.0",
+    "morgan": "^1.10.0",
     "nodemod": "^2.6.1",
     "rimraf": "^3.0.2"
   },
